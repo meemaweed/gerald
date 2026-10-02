@@ -1,810 +1,125 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>gerald</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-
-:root{
-  --bg:#140302;
-  --panel:#200806;
-  --panel-2:#2c0b07;
-  --line:#6e1c10;
-  --line-soft:#3a0d07;
-  --text:#d0a894;
-  --text-bright:#f0c8b0;
-  --dim:#a55c44;
-  --faint:#742e20;
-  --blood:#b01c0e;
-  --blood-hot:#e8381c;
-  --blood-wet:#ff5a34;
-  --flesh:#c96a4e;
-  --bone:#e8cdb6;
-}
-
-html{scroll-behavior:smooth}
-
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:15px;
-  line-height:1.75;
-  padding:0 22px 90px;
-  -webkit-font-smoothing:antialiased;
-  min-height:100vh;
-  position:relative;
-}
-
-.lamp{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 68% 46% at 50% 0%,
-      rgba(232,56,28,.5), transparent 64%),
-    radial-gradient(ellipse 48% 30% at 50% 4%,
-      rgba(255,90,52,.28), transparent 68%),
-    radial-gradient(ellipse 60% 38% at 12% 94%,
-      rgba(176,28,14,.34), transparent 68%),
-    radial-gradient(ellipse 48% 30% at 90% 80%,
-      rgba(176,28,14,.24), transparent 70%),
-    radial-gradient(ellipse 30% 18% at 68% 42%,
-      rgba(201,106,78,.14), transparent 72%);
-  animation:heartbeat 4.4s ease-in-out infinite;
-}
-@keyframes heartbeat{
-  0%,100%{opacity:.72;transform:scale(1)}
-  5%{opacity:1;transform:scale(1.055)}
-  12%{opacity:.78;transform:scale(1.012)}
-  19%{opacity:1;transform:scale(1.038)}
-  33%{opacity:.72;transform:scale(1)}
-}
-
-.veins{
-  position:fixed;inset:0;z-index:1;pointer-events:none;
-  background-image:
-    radial-gradient(ellipse 95% 45% at 22% 32%, rgba(232,56,28,.075) 0%, transparent 52%),
-    radial-gradient(ellipse 78% 34% at 82% 62%, rgba(176,28,14,.09) 0%, transparent 54%),
-    radial-gradient(ellipse 55% 22% at 45% 84%, rgba(255,90,52,.055) 0%, transparent 48%),
-    radial-gradient(ellipse 40% 18% at 12% 68%, rgba(201,106,78,.06) 0%, transparent 50%);
-  mix-blend-mode:screen;
-}
-
-.sheen{
-  position:fixed;inset:0;z-index:2;pointer-events:none;
-  background:
-    radial-gradient(ellipse 22% 14% at 34% 18%, rgba(255,180,140,.055) 0%, transparent 65%),
-    radial-gradient(ellipse 18% 11% at 74% 46%, rgba(255,150,110,.045) 0%, transparent 68%),
-    radial-gradient(ellipse 26% 15% at 58% 78%, rgba(255,180,140,.04) 0%, transparent 68%);
-  animation:sheenDrift 22s ease-in-out infinite alternate;
-  mix-blend-mode:screen;
-}
-@keyframes sheenDrift{
-  0%{transform:translate(0,0) scale(1)}
-  50%{transform:translate(14px,-10px) scale(1.06)}
-  100%{transform:translate(-12px,8px) scale(1.02)}
-}
-
-body::before{
-  content:"";
-  position:fixed;inset:0;z-index:100;pointer-events:none;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  opacity:.14;
-  mix-blend-mode:overlay;
-}
-body::after{
-  content:"";
-  position:fixed;inset:0;z-index:101;pointer-events:none;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>");
-  opacity:.07;
-  mix-blend-mode:overlay;
-  animation:grainShift .9s steps(3) infinite;
-}
-@keyframes grainShift{
-  0%{transform:translate(0,0)}
-  33%{transform:translate(-1px,1px)}
-  66%{transform:translate(1px,-1px)}
-  100%{transform:translate(0,0)}
-}
-
-.vig{
-  position:fixed;inset:0;z-index:99;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 36%,
-    transparent 30%,
-    rgba(28,4,1,.68) 74%,
-    rgba(14,1,0,.96) 100%);
-}
-
-.page{
-  max-width:790px;
-  margin:0 auto;
-  position:relative;
-  z-index:3;
-  padding-left:64px;
-}
-.page::before{
-  content:"";
-  position:absolute;
-  left:22px;
-  top:24px;
-  bottom:24px;
-  width:1px;
-  background:linear-gradient(180deg,
-    transparent 0,
-    var(--line) 60px,
-    var(--blood) calc(50%),
-    var(--line) calc(100% - 60px),
-    transparent 100%);
-  pointer-events:none;
-  box-shadow:0 0 12px rgba(232,56,28,.4);
-}
-
-header{
-  padding:88px 0 54px;
-  border-bottom:1px solid var(--line);
-  position:relative;
-}
-
-.name-block{
-  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-weight:200;
-  line-height:1;
-  letter-spacing:-2.5px;
-}
-.name-row{
-  display:block;
-  font-size:clamp(24px,5vw,42px);
-  color:var(--text-bright);
-  position:relative;
-  padding:4px 0;
-}
-.name-row.real{
-  font-style:italic;
-  letter-spacing:-1px;
-}
-.name-row.fake{
-  color:var(--text-bright);
-  font-size:clamp(38px,8.5vw,74px);
-  letter-spacing:-3.5px;
-  text-shadow:
-    2.6px 0 0 rgba(232,56,28,.72),
-    -1.8px 0 0 rgba(70,130,160,.22),
-    0 0 48px rgba(232,56,28,.65),
-    0 0 90px rgba(176,28,14,.35);
-  animation:tremor 6.4s ease-in-out infinite;
-  padding-top:14px;
-}
-@keyframes tremor{
-  0%,100%{transform:translate(0,0) skewX(0)}
-  11%{transform:translate(-.6px,.3px) skewX(.18deg)}
-  14%{transform:translate(.4px,-.3px) skewX(-.14deg)}
-  17%{transform:translate(0,0) skewX(0)}
-  49%{transform:translate(-.3px,.4px) skewX(.12deg)}
-  53%{transform:translate(0,0) skewX(0)}
-  76%{transform:translate(.5px,-.4px) skewX(-.17deg)}
-  79%{transform:translate(0,0) skewX(0)}
-  92%{transform:translate(-.2px,-.2px) skewX(.08deg)}
-  94%{transform:translate(0,0) skewX(0)}
-}
-.tag{
-  margin-top:22px;
-  font-style:italic;
-  color:var(--dim);
-  font-size:14px;
-}
-
-section{
-  padding:48px 0;
-  border-bottom:1px solid var(--line-soft);
-  position:relative;
-}
-section:last-of-type{border-bottom:none}
-
-section::before{
-  content:"";
-  position:absolute;
-  left:-42px;
-  top:58px;
-  width:42px;
-  height:1px;
-  background:linear-gradient(90deg,
-    var(--blood-hot) 0,
-    var(--blood-hot) 6px,
-    var(--line) 6px,
-    var(--line) 100%);
-  pointer-events:none;
-}
-section::after{
-  content:"";
-  position:absolute;
-  left:-42px;
-  top:58px;
-  width:7px;height:7px;
-  background:var(--blood-hot);
-  border-radius:50%;
-  transform:translate(-50%,-50%);
-  box-shadow:
-    0 0 12px rgba(232,56,28,1),
-    0 0 24px rgba(232,56,28,.6);
-  pointer-events:none;
-}
-
-.label{
-  display:flex;align-items:center;gap:10px;
-  font-family:"Courier New",monospace;
-  font-size:10px;
-  letter-spacing:2.6px;
-  color:var(--bone);
-  opacity:.68;
-  text-transform:uppercase;
-  margin-bottom:22px;
-}
-.label::before{
-  content:"";
-  width:4px;height:4px;
-  background:var(--blood-hot);
-  transform:rotate(45deg);
-  box-shadow:0 0 8px rgba(232,56,28,.9);
-  flex-shrink:0;
-  opacity:.9;
-}
-
-p{margin-bottom:16px}
+*{box-sizing:border-box}
+html{background:#170807}
+body{margin:0;background:#170807;color:#cfae9f;font-family:Georgia,"Times New Roman",serif;font-size:16px;line-height:1.7}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:screen}
+body:after{content:"";position:fixed;inset:-20%;pointer-events:none;background:radial-gradient(ellipse at 45% 15%,rgba(170,55,35,.2),transparent 38%),radial-gradient(ellipse at 75% 75%,rgba(110,24,17,.16),transparent 35%);filter:blur(35px)}
+.page{position:relative;max-width:760px;margin:auto;padding:48px 28px 90px}
+header{padding:35px 0 42px;border-bottom:2px solid #582018;transform:rotate(-.25deg)}
+.name{font-size:clamp(43px,9vw,82px);line-height:.9;color:#e3c5b6;letter-spacing:-4px;text-shadow:3px 2px 0 #601c13}
+.realname{font-size:14px;color:#8f5547;margin:12px 0 0 5px;text-decoration:line-through;text-decoration-color:#9d2d1e}
+.intro{max-width:590px;margin:20px 0 0 7px;color:#b98f7e}
+section{padding:42px 5px;border-bottom:1px solid #40150f}
+h2{font-size:12px;font-weight:normal;letter-spacing:2px;text-transform:lowercase;color:#9e5b49;margin:0 0 20px}
+p{margin:0 0 18px}
 p:last-child{margin-bottom:0}
-b{color:var(--text-bright);font-weight:normal}
-i{color:var(--dim)}
-
-.note{
-  display:block;
-  font-family:"Courier New",monospace;
-  font-size:11px;
-  letter-spacing:.6px;
-  color:var(--flesh);
-  opacity:.95;
-  padding:0 0 0 18px;
-  margin:6px 0 12px;
-  position:relative;
-  transform:rotate(-0.4deg);
-  line-height:1.55;
-}
-.note::before{
-  content:"↳";
-  position:absolute;
-  left:0;top:0;
-  color:var(--blood-hot);
-  opacity:1;
-  text-shadow:0 0 8px rgba(232,56,28,.7);
-}
-
-.note.inline{
-  display:inline-block;
-  padding:1px 10px 1px 14px;
-  margin:0 0 0 10px;
-  transform:rotate(-1deg) translateY(-1px);
-  border:1px dotted rgba(232,56,28,.55);
-  vertical-align:middle;
-  background:rgba(232,56,28,.06);
-  font-size:10.5px;
-}
-
-.note.lick{
-  color:var(--blood-wet);
-  text-shadow:0 0 10px rgba(255,90,52,.45);
-}
-
-.data{border-top:1px solid var(--line-soft)}
-.data div{
-  display:flex;
-  justify-content:space-between;
-  gap:24px;
-  padding:11px 0;
-  border-bottom:1px solid var(--line-soft);
-  font-size:14px;
-  position:relative;
-}
-.data div::before{
-  content:"";
-  position:absolute;left:-14px;top:50%;
-  width:6px;height:1px;
-  background:var(--blood-hot);
-  opacity:0;
-  transition:opacity .18s;
-  box-shadow:0 0 8px rgba(232,56,28,.9);
-}
-.data div:hover::before{opacity:1}
-.data div span:first-child{
-  font-family:"Courier New",monospace;
-  font-size:10px;
-  letter-spacing:1.6px;
-  color:var(--dim);
-  text-transform:uppercase;
-  padding-top:4px;
-  flex-shrink:0;
-}
-.data div span:last-child{
-  text-align:right;
-  color:var(--text-bright);
-}
-
-/* real images sit inside these boxes */
-.frame-img, .ph{
-  position:relative;
-  width:100%;
-  background:linear-gradient(160deg,#240a06,#0c0202);
-  overflow:hidden;
-  border:1px solid var(--line);
-}
-.frame-img{
-  aspect-ratio:16 / 8;
-  clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,22px 100%,0 calc(100% - 22px));
-  box-shadow:inset 0 0 60px rgba(232,56,28,.14);
-}
-.ph{
-  aspect-ratio:21 / 5;
-  margin:22px 0;
-  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
-  box-shadow:inset 0 0 40px rgba(232,56,28,.1);
-}
-.frame-img img, .ph img{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  z-index:1;
-}
-.frame-img::before, .ph::before{
-  content:"";
-  position:absolute;inset:0;z-index:2;
-  background:
-    radial-gradient(ellipse 62% 52% at 50% 55%, rgba(232,56,28,.15), transparent 70%),
-    repeating-linear-gradient(0deg, transparent 0 3px, rgba(232,56,28,.06) 3px 4px);
-  pointer-events:none;
-}
-.frame-img .tagline{
-  position:absolute;
-  left:14px;bottom:11px;
-  font-family:"Courier New",monospace;
-  font-size:9px;
-  letter-spacing:2.4px;
-  color:var(--faint);
-  text-transform:uppercase;
-  z-index:3;
-}
-.frame-img .reticle{
-  position:absolute;
-  width:34px;height:34px;
-  border:1px solid rgba(232,56,28,.8);
-  border-radius:50%;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  animation:reticleDrift 9s ease-in-out infinite;
-  box-shadow:
-    0 0 22px rgba(232,56,28,.45),
-    inset 0 0 12px rgba(232,56,28,.3);
-  z-index:4;
-}
-.frame-img .reticle::before,
-.frame-img .reticle::after{
-  content:"";position:absolute;background:rgba(232,56,28,.85);
-  box-shadow:0 0 8px rgba(232,56,28,.7);
-}
-.frame-img .reticle::before{
-  left:50%;top:-6px;bottom:-6px;width:1px;transform:translateX(-50%);
-}
-.frame-img .reticle::after{
-  top:50%;left:-6px;right:-6px;height:1px;transform:translateY(-50%);
-}
-@keyframes reticleDrift{
-  0%,100%{transform:translate(-50%,-50%)}
-  25%{transform:translate(calc(-50% + 40px), calc(-50% - 14px))}
-  50%{transform:translate(calc(-50% + 12px), calc(-50% + 30px))}
-  75%{transform:translate(calc(-50% - 30px), calc(-50% + 8px))}
-}
-
-.ph .ph-label{
-  position:absolute;
-  left:12px;bottom:7px;
-  font-family:"Courier New",monospace;
-  font-size:9px;
-  letter-spacing:2.4px;
-  color:var(--faint);
-  text-transform:uppercase;
-  z-index:3;
-}
-
-.doc-link{
-  display:inline-flex;
-  align-items:center;
-  gap:12px;
-  font-family:"Courier New",monospace;
-  font-size:12px;
-  letter-spacing:2.4px;
-  text-transform:uppercase;
-  color:var(--text-bright);
-  text-decoration:none;
-  padding:10px 16px 10px 14px;
-  background:linear-gradient(180deg,var(--panel-2),var(--panel));
-  border:1px solid var(--line);
-  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
-  transition:border-color .2s, color .2s, box-shadow .2s, transform .2s;
-}
-.doc-link::before{
-  content:"";
-  width:6px;height:6px;
-  background:var(--blood-hot);
-  transform:rotate(45deg);
-  box-shadow:0 0 12px rgba(232,56,28,1);
-  animation:voicePulse 3.2s ease-in-out infinite;
-}
-.doc-link .arr{
-  color:var(--blood-hot);
-  font-size:14px;
-  letter-spacing:0;
-}
-.doc-link:hover{
-  border-color:rgba(232,56,28,.7);
-  color:var(--blood-wet);
-  box-shadow:
-    0 0 26px rgba(232,56,28,.3),
-    inset 0 0 22px rgba(232,56,28,.12);
-  transform:translateX(2px);
-}
-@keyframes voicePulse{
-  0%,100%{opacity:.75}
-  50%{opacity:1;box-shadow:0 0 20px rgba(232,56,28,1)}
-}
-
-.empty{
-  height:90px;
-  border:1px dashed var(--line);
-  background:
-    repeating-linear-gradient(45deg,
-      transparent 0 8px,
-      rgba(232,56,28,.09) 8px 9px);
-  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);
-}
-
-.voice-line{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  font-family:"Courier New",monospace;
-  font-size:11px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:var(--bone);
-  opacity:.75;
-  text-decoration:none;
-  padding:6px 10px 6px 0;
-  border-bottom:1px solid transparent;
-  transition:opacity .2s, color .2s, border-color .2s;
-}
-.voice-line::before{
-  content:"";
-  width:5px;height:5px;
-  background:var(--blood-hot);
-  transform:rotate(45deg);
-  box-shadow:0 0 12px rgba(232,56,28,1);
-  flex-shrink:0;
-  animation:voicePulse 3.2s ease-in-out infinite;
-}
-.voice-line:hover{
-  opacity:1;
-  color:var(--blood-wet);
-  border-color:rgba(232,56,28,.6);
-  text-shadow:0 0 14px rgba(232,56,28,.85);
-}
-.voice-line .val{
-  color:var(--text-bright);
-  font-weight:bold;
-  letter-spacing:2px;
-}
-.voice-line:hover .val{color:var(--blood-wet)}
-.voice-line .arr{color:var(--faint);letter-spacing:1px}
-
-.designation{
-  text-align:center;
-  padding:8px 0 4px;
-}
-.designation .q{
-  font-family:"Courier New",monospace;
-  font-size:10px;
-  letter-spacing:2.6px;
-  color:var(--bone);
-  opacity:.5;
-  text-transform:uppercase;
-  margin-bottom:14px;
-}
-.designation .a{
-  display:inline-block;
-  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-weight:200;
-  font-size:clamp(30px,5.5vw,46px);
-  line-height:1;
-  letter-spacing:-2px;
-  color:var(--text-bright);
-  text-shadow:
-    1.8px 0 0 rgba(232,56,28,.75),
-    -1.4px 0 0 rgba(70,130,160,.24),
-    0 0 38px rgba(232,56,28,.6);
-  animation:tremor 8.2s ease-in-out infinite;
-  padding:4px 22px;
-  border-top:1px solid rgba(232,56,28,.45);
-  border-bottom:1px solid rgba(232,56,28,.45);
-}
-
-.redact{
-  display:inline-block;
-  background:#0e0100;
-  color:transparent;
-  user-select:none;
-  padding:0 4px;
-  letter-spacing:0;
-  box-shadow:
-    inset 0 0 14px rgba(232,56,28,.45),
-    0 0 10px rgba(232,56,28,.2);
-  border-left:1px solid rgba(232,56,28,.4);
-  border-right:1px solid rgba(232,56,28,.4);
-  vertical-align:baseline;
-}
-
-.tampered{
-  display:inline-block;
-  position:relative;
-  color:var(--faint);
-  padding:0 6px;
-  background:
-    linear-gradient(90deg,
-      #0e0100 0 16%,
-      transparent 16% 24%,
-      #0e0100 24% 42%,
-      transparent 42% 51%,
-      #0e0100 51% 76%,
-      transparent 76% 85%,
-      #0e0100 85% 100%);
-  box-shadow:inset 0 0 12px rgba(232,56,28,.25);
-  user-select:none;
-}
-.tampered::before{
-  content:"";
-  position:absolute;
-  left:2px;right:38%;
-  top:36%;
-  height:2px;
-  background:
-    repeating-linear-gradient(80deg,
-      var(--blood-hot) 0 5px,
-      var(--blood) 5px 7px,
-      transparent 7px 9px);
-  transform:translateY(-50%) rotate(-1.2deg);
-  opacity:.95;
-  pointer-events:none;
-  box-shadow:0 0 6px rgba(232,56,28,.6);
-}
-.tampered::after{
-  content:"";
-  position:absolute;
-  left:42%;right:-2px;
-  top:64%;
-  height:2px;
-  background:
-    repeating-linear-gradient(-78deg,
-      var(--blood-hot) 0 4px,
-      var(--blood) 4px 6px,
-      transparent 6px 8px);
-  transform:translateY(-50%) rotate(1deg);
-  opacity:.95;
-  pointer-events:none;
-  box-shadow:0 0 6px rgba(232,56,28,.6);
-}
-
-.scribble-lite{
-  position:relative;
-  display:inline-block;
-  color:var(--blood);
-  font-style:italic;
-  padding:0 3px;
-  opacity:1;
-}
-.scribble-lite::before{
-  content:"";
-  position:absolute;
-  left:-4px;right:32%;
-  top:50%;
-  height:2px;
-  background:
-    repeating-linear-gradient(82deg,
-      var(--blood-hot) 0 5px,
-      var(--blood) 5px 7px,
-      transparent 7px 9px);
-  transform:translateY(-50%) rotate(-1deg);
-  opacity:.9;
-  pointer-events:none;
-}
-.scribble-lite::after{
-  content:"";
-  position:absolute;
-  left:36%;right:-4px;
-  top:50%;
-  height:1px;
-  background:var(--blood);
-  transform:translateY(-50%) translateY(2px) rotate(.8deg);
-  opacity:.7;
-  pointer-events:none;
-}
-
-.scribble{
-  position:relative;
-  display:inline-block;
-  color:var(--blood);
-  font-style:italic;
-  opacity:.95;
-  padding:0 2px;
-}
-.scribble::before{
-  content:"";
-  position:absolute;
-  left:-6px;right:-6px;
-  top:50%;
-  height:3px;
-  background:
-    repeating-linear-gradient(82deg,
-      var(--blood-hot) 0 5px,
-      var(--blood) 5px 7px,
-      transparent 7px 9px);
-  transform:translateY(-50%) rotate(-1deg);
-  pointer-events:none;
-  box-shadow:0 0 10px rgba(232,56,28,.65);
-}
-.scribble::after{
-  content:"";
-  position:absolute;
-  left:-6px;right:-6px;
-  top:50%;
-  height:2px;
-  background:
-    repeating-linear-gradient(-72deg,
-      var(--blood-hot) 0 4px,
-      transparent 4px 6px);
-  transform:translateY(-50%) translateY(2px) rotate(0.8deg);
-  pointer-events:none;
-  opacity:1;
-}
-
-.trail{color:var(--faint);opacity:.9}
-.cut{
-  display:inline-block;
-  width:60%;
-  height:1em;
-  background:linear-gradient(90deg,
-    var(--faint) 0%,
-    var(--faint) 30%,
-    transparent 92%);
-  opacity:.5;
-  transform:translateY(3px) rotate(-.4deg);
-}
-
-@media (max-width:640px){
-  .page{padding-left:34px}
-  .page::before{left:14px}
-  header{padding:68px 0 44px}
-  section{padding:36px 0}
-  section::before{left:-24px;width:24px;top:48px}
-  section::after{left:-24px;top:48px}
-  .data div{flex-direction:column;gap:4px}
-  .data div span:last-child{text-align:left}
-  .data div::before{display:none}
-  .note.inline{display:block;margin:6px 0 0}
-}
+.info{margin:0 0 10px;padding:12px 4px;border-top:1px solid #40150f;border-bottom:1px solid #40150f}
+.info span{display:inline-block;margin-right:22px;color:#b87b68}
+.info b{font-weight:normal;color:#dfc1b3}
+.photo{margin:30px -2px 0;position:relative}
+.photo img{display:block;width:100%;height:auto;max-height:520px;object-fit:cover;border:1px solid #542016}
+.photo:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(72,12,8,.08),transparent 45%,rgba(155,39,23,.08))}
+.break{margin:34px 0 8px;text-align:center;color:#713125;font-size:12px;letter-spacing:3px}
+a{color:#d3a698}
+.doc{font-size:15px;text-decoration:underline;text-decoration-color:#773022;text-underline-offset:4px}
+.appearance{margin-top:5px}
+.appearance img{width:100%;display:block;border:1px solid #542016}
+.cross{color:#8d3427;text-decoration:line-through;text-decoration-thickness:2px}
+@media(max-width:600px){.page{padding:28px 18px 65px}.name{letter-spacing:-3px}.info span{margin-right:12px;margin-bottom:4px}}
 </style>
 </head>
 <body>
-<div class="lamp"></div><div class="veins"></div><div class="sheen"></div><div class="vig"></div>
 <div class="page">
 <header>
-  <div class="name-block">
-    <span class="name-row real"><span class="tampered">King Gerald Millard</span></span>
-    <span class="name-row fake">Gerald King Millard</span>
-  </div>
-  <div class="tag">bodyguard. assassin. professional nuisance.</div>
+  <div class="realname">King Gerald Millard</div>
+  <div class="name">Gerald King Millard</div>
+  <div class="intro">assassin, bodyguard, professional liar, and generally rather pleased with himself.</div>
 </header>
 
 <section>
-  <span class="label">subject</span>
-  <div class="data">
-    <div><span>age</span><span>51</span></div>
-    <div><span>height</span><span>6'6"</span></div>
-    <div><span>gender</span><span>Male, he / him</span></div>
-    <div><span>origin</span><span>Franco-British</span></div>
-    <div><span>work</span><span>Bodyguard, right hand</span></div>
+  <div class="info">
+    <span>51</span><b>years old</b>
+    <span>6'6"</span><b>height</b>
+    <span>he / him</span><b>male</b>
+    <span>Franco-British</span>
   </div>
+  <p>Gerald is the sort of person who can walk into a room and immediately decide he is the most interesting person in it. Usually he is already talking before anyone else gets the chance.</p>
+  <p>He is not nearly as stupid as he likes to look.</p>
 </section>
+
+<div class="photo"><img src="gif0.gif" alt="Gerald"></div>
 
 <section>
-  <span class="label">visual</span>
-  <div class="frame-img">
-    <img src="gif0.gif" alt="Gerald">
-    <div class="reticle"></div>
-    <div class="tagline">/// gerald ///</div>
-  </div>
+<h2>personality</h2>
+<p>Gerald is cocky, narcissistic, easily bored, and very fond of himself. He likes women, alcohol, nice things, attention, and being told that he's good at something, although he'd probably prefer to tell you himself. He can be charming when he wants something and unbearable when he doesn't.</p>
+<p>He also likes pretending to be an idiot. It is useful. Gerald can act oblivious, laugh at the wrong thing, miss an obvious point, or carry on like he hasn't noticed anything at all. People tend to stop watching you properly when they think you're harmless. He has been doing this for years, and he is rather good at it.</p>
+<p>He does not like people seeing him upset. Anger is easier. A joke is easier. Acting annoyed is easier. If something actually gets to him, he will usually find some way of making it look like it didn't.</p>
+<p>He can be affectionate, too, although he has a funny way of showing it. He gets comfortable, gets annoying, starts teasing people, and then acts like he wasn't being nice at all. He cares more than he likes admitting.</p>
 </section>
+
+<div class="break">—</div>
 
 <section>
-  <span class="label">personality</span>
-  <p>Gerald likes himself. A lot. He's cocky, stubborn, loud when he wants to be, and very pleased with himself whenever he's good at something. He likes attention, expensive things, good food, drinking, women, and being told he's impressive. He'll happily tell you he's the best in the room if nobody else gets there first.</p>
-  <p>He's also very good at pretending to be less than he is. Gerald can act careless, oblivious, stupid, or simply too busy joking around to notice what's happening. Most of the time it's deliberate. He'd rather have someone underestimate him than figure out what he's actually thinking. He can keep a straight face through almost anything if it means keeping control of the situation.</p>
-  <p>With people he likes, he's much easier to deal with. He jokes, teases, gets overly comfortable, and enjoys getting a reaction out of people. He can be genuinely pleasant when he isn't trying to prove something. He also gets bored quickly. Sitting around with nothing to do is one of the few things that reliably gets under his skin.</p>
-  <p>He's still got a temper. Push him hard enough and the joking disappears pretty quickly. Gerald hates being treated like he's stupid, hates losing control, and hates looking weak even more. If something is actually bothering him, he'll usually turn it into irritation before he'll admit that it hurt him.</p>
-  <p>That doesn't mean he never cares. He can be protective and surprisingly thoughtful with people he's attached to. He just has a terrible habit of hiding it behind teasing, arrogance, or pretending he doesn't care in the first place.</p>
+<h2>worldview</h2>
+<p>Gerald has never had much patience for sitting around and waiting for life to hand him something. If he wants something, he goes after it. If he gets bored, he finds something else. If somebody gets in the way, that's their problem.</p>
+<p>He doesn't spend much time worrying about whether something is right or wrong. He cares whether it works, whether it is worth his time, and whether he can get away with it. He likes having money because money lets him do what he wants. He likes being dangerous because being dangerous means people have to take him seriously.</p>
+<p>Most of all, Gerald wants control over how other people see him. He wants to be the clever one, the impressive one, the one who has already figured everything out. Being laughed at is irritating. Being pitied is worse. Being genuinely understood is probably worst of all.</p>
+<p>He can put on whatever version of himself is useful. Friendly Gerald. Stupid Gerald. Charming Gerald. Unbothered Gerald. He doesn't particularly care which one people believe.</p>
 </section>
 
-<div class="ph"><img src="gif01.gif" alt=""></div>
+<div class="photo"><img src="gif01.gif" alt=""></div>
 
 <section>
-  <span class="label">worldview</span>
-  <p>Gerald doesn't think life is particularly fair, and he doesn't see much reason to wait around for it to become fair. If there's something he wants, he'd rather take the chance and get it himself. Money gives him freedom. Being good at what he does gives him more of it. He respects people who can actually do something, and has very little patience for people who can't.</p>
-  <p>He likes pleasure because it's simple. Drink something good. Eat something good. Go somewhere interesting. Find a woman. Do the job. Find another job. Find something else when that gets boring. There's always something to do.</p>
-  <p>Most importantly, Gerald doesn't like being seen as anything other than confident. He can be frightened, angry, ashamed, uncertain, even genuinely upset, but he'd rather make a joke than let someone see it. If he has to act like everything is fine until he believes it himself, he'll do that too.</p>
+<h2>backstory</h2>
+<p>Gerald grew up in the Millard family with his mother Aurore, his father Sylvester, and his younger brother Alan. They were a wealthy family and cared very much about how they looked to other people. Gerald was punished more often than Alan and was usually the one making things difficult, especially when he refused to listen. He was angry about a lot of it, but learned fairly early that showing it only made things worse. So he stopped showing it. He'd laugh, make some stupid comment, act like he didn't care, and let everyone think that was all there was to him.</p>
+<p>He kept doing that when he got older. Gerald became an assassin, started drinking and smoking, chased women whenever he felt like it, and built himself into someone who was very easy to mistake for an arrogant idiot. He liked that. It meant people underestimated him. He could act careless, act oblivious, act like everything was a joke while keeping the things he actually thought to himself. Even his ego was useful to him. If he was always talking about how great he was, nobody had much reason to wonder what he was trying so hard not to show.</p>
+<p>He still loved the attention. Gerald liked women, liked being wanted, liked being praised, and liked having people around him who thought he was impressive. He could be a complete narcissist about it. Michelle and Melonie became part of his life somewhere along the way, and somehow they stayed around despite everything else that came with him. He could be affectionate with them, disappear into his work, come back acting like nothing had happened, and carry on as usual. Gerald was very good at making things look normal.</p>
+<p>Until he killed them.</p>
+<p>He didn't stop pretending after that, either.</p>
+<p>Gerald died at fifty-one.</p>
+<p><span class="cross">I suppose I could explain why.</span></p>
+<p>Hm…</p>
+<p>Hhehe… yeah. It's fine. It's all fine.</p>
+<p>Nothing to worry about anymore. No reason to keep thinking about it. It's over, isn't it?</p>
+<p>...yes.</p>
+<p>Heh. Hm… that's better. I can leave it there.</p>
 </section>
 
-<div class="ph"><img src="gif02.gif" alt=""></div>
+<div class="photo"><img src="gif02.gif" alt=""></div>
 
 <section>
-  <span class="label">presence</span>
-  <p>Gerald is hard to ignore. He's tall, talks like he already knows what he's doing, and carries himself with the confidence of someone who expects people to move out of his way. When he's in a good mood, he's loud, playful, and annoyingly charming. When he's not, the change is obvious. He doesn't always need to raise his voice to make a room uncomfortable.</p>
-  <p>People who know him well get a different version. He talks more freely, jokes more, and lets himself act stupid without needing anyone to believe that he actually is. It's still a performance sometimes. He's just more comfortable around the people who already know him.</p>
+<h2>abilities</h2>
+<a class="doc" href="https://docs.google.com/document/d/12BAW6GSbd7vHeBXTEV3MOg3R1P6om24JNRo2SJ2yeZo/edit?usp=sharing" target="_blank" rel="noopener">gerald's abilities →</a>
 </section>
 
-<div class="ph"><img src="gif03.gif" alt=""></div>
+<div class="photo"><img src="gif03.gif" alt=""></div>
+
+<section class="appearance">
+<h2>appearance</h2>
+<img src="gif08.jpeg" alt="Gerald">
+</section>
+
+<div class="photo"><img src="gif04.gif" alt=""></div>
 
 <section>
-  <span class="label">backstory</span>
-  <p>Gerald grew up in the Millard family with his mother Aurore, his father Sylvester, and his younger brother Alan. They were a wealthy family and cared very much about how they looked to other people. Gerald was punished more often than Alan and was usually the one making things difficult, especially when he refused to listen. He was angry about a lot of it, but learned fairly early that showing it only made things worse. So he stopped showing it. He'd laugh, make some stupid comment, act like he didn't care, and let everyone think that was all there was to him.</p>
-  <p>He kept doing that when he got older. Gerald became an assassin, started drinking and smoking, chased women whenever he felt like it, and built himself into someone who was very easy to mistake for an arrogant idiot. He liked that. It meant people underestimated him. He could act careless, act oblivious, act like everything was a joke while keeping the things he actually thought to himself. Even his ego was useful to him. If he was always talking about how great he was, nobody had much reason to wonder what he was trying so hard not to show.</p>
-  <p>He still loved the attention. Gerald liked women, liked being wanted, liked being praised, and liked having people around him who thought he was impressive. He could be a complete narcissist about it. Michelle and Melonie became part of his life somewhere along the way, and somehow they stayed around despite everything else that came with him. He could be affectionate with them, disappear into his work, come back acting like nothing had happened, and carry on as usual. Gerald was very good at making things look normal.</p>
-  <p>Until he killed them.</p>
-  <p>He didn't stop pretending after that, either.</p>
-  <p>Gerald died at fifty-one.</p>
-  <p><span class="scribble-lite">I suppose I could explain why.</span></p>
-  <p>Hm…</p>
-  <p>Hhehe… yeah. It's fine. It's all fine.</p>
-  <p>Nothing to worry about anymore. No reason to keep thinking about it. It's over, isn't it?</p>
-  <p>...yes.</p>
-  <p>Heh. Hm… that's better. I can leave it there.</p>
+<h2>voice</h2>
+<p><a class="doc" href="#" target="_blank" rel="noopener">Charlie Harper</a></p>
 </section>
 
-<div class="ph"><img src="gif04.gif" alt=""></div>
+<div class="photo"><img src="gif05.gif" alt=""></div>
 
 <section>
-  <span class="label">abilities</span>
-  <a class="doc-link" href="https://docs.google.com/document/d/12BAW6GSbd7vHeBXTEV3MOg3R1P6om24JNRo2SJ2yeZo/edit?usp=sharing" target="_blank" rel="noopener noreferrer">open file <span class="arr">↗</span> abilities.doc</a>
+<h2>designation</h2>
+<p>killer.</p>
 </section>
 
-<div class="ph"><img src="gif05.gif" alt=""></div>
-
-<section>
-  <span class="label">appearance</span>
-  <p>Gerald is fifty-one, although he doesn't always look it. His greyish hair is slicked back and kept neat, and he usually wears a black suit, white shirt, and matching tie. He also has a large grey feather boa that he refuses to get rid of, because apparently a normal suit isn't enough.</p>
-  <p>His black fedora is decorated with two playing cards and a reddish-black rose. He also wears dark sunglasses, usually low enough that he can actually see. Most of his clothes are kept neat even when the rest of his life isn't.</p>
-</section>
-
-<div class="ph"><img src="gif06.gif" alt=""></div>
-
-<section>
-  <span class="label">voice</span>
-  <a class="voice-line" href="#" target="_blank" rel="noopener noreferrer">voice claim <span class="val">— charlie harper</span><span class="arr">↗</span></a>
-</section>
-
-<div class="ph"><img src="gif07.gif" alt=""></div>
-
-<section>
-  <span class="label">designation</span>
-  <div class="designation"><div class="q">survivor or killer</div><div class="a">killer</div></div>
-</section>
-
-<div class="ph"><img src="gif09.jpeg" alt=""></div>
+<div class="photo"><img src="gif06.gif" alt=""></div>
 </div>
 </body>
 </html>
